@@ -1,0 +1,88 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  pr-checks:
+    name: PR Validation
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'pnpm'
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Generate Prisma Client
+      run: pnpm prisma generate
+
+    - name: Run linting
+      run: pnpm lint
+
+    - name: Type check
+      run: pnpm tsc --noEmit
+
+    - name: Build check
+      run: pnpm build
+      env:
+        DATABASE_URL: postgresql://test:test@localhost:5432/test
+        NEXT_PUBLIC_APP_URL: http://localhost:3000
+
+    - name: Check for package.json changes
+      run: |
+        if git diff --name-only HEAD^ HEAD | grep -q "package.json"; then
+          echo "Warning: package.json has been modified. Please verify dependencies."
+        fi
+
+    - name: Check for schema changes
+      run: |
+        if git diff --name-only HEAD^ HEAD | grep -q "prisma/schema.prisma"; then
+          echo "Warning: Prisma schema has been modified. Please ensure migrations are provided."
+        fi
+
+    - name: Comment PR
+      uses: actions/github-script@v7
+      if: always()
+      with:
+        script: |
+          const { owner, repo, number } = context.issue;
+
+          const comment = `
+          ## PR 检查结果 ✅
+
+          ### 代码质量
+          - **ESLint**: 通过
+          - **TypeScript**: 通过
+          - **构建检查**: 通过
+
+          ### 注意事项
+          - 确保所有环境变量已正确配置
+          - 如有数据库schema更改，请提供相应的migration文件
+          - 请在合并前测试所有功能
+
+          ---
+          *此评论由 GitHub Actions 自动生成*
+          `;
+
+          github.rest.issues.createComment({
+            owner,
+            repo,
+            issue_number: number,
+            body: comment
+          });

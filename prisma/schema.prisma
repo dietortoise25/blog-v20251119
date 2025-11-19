@@ -1,0 +1,234 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 用户表
+model User {
+  id            Int      @id @default(autoincrement())
+  username      String   @unique @db.VarChar(50)
+  email         String?  @unique @db.VarChar(100)
+  passwordHash  String?  @map("password_hash") @db.VarChar(255)
+  displayName   String?  @map("display_name") @db.VarChar(100)
+  bio           String?  @db.Text
+  avatarUrl     String?  @map("avatar_url") @db.VarChar(255)
+  website       String?  @db.VarChar(255)
+  githubUsername String? @map("github_username") @db.VarChar(100)
+  twitterUsername String? @map("twitter_username") @db.VarChar(100)
+  isActive      Boolean  @default(true) @map("is_active")
+  isAdmin       Boolean  @default(false) @map("is_admin")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // 关系
+  posts         Post[]
+  mediaFiles    MediaFile[]
+  comments      Comment[]
+
+  @@map("users")
+}
+
+// 文章表
+model Post {
+  id          Int        @id @default(autoincrement())
+  title       String     @db.VarChar(255)
+  slug        String     @unique @db.VarChar(255)
+  content     String     @db.Text
+  excerpt     String?    @db.Text
+  coverImage  String?    @map("cover_image") @db.VarChar(255)
+  authorId    Int?       @map("author_id")
+  status      String     @default("draft") @db.VarChar(20)
+  featured    Boolean    @default(false)
+  viewCount   Int        @default(0) @map("view_count")
+  likeCount   Int        @default(0) @map("like_count")
+  commentCount Int       @default(0) @map("comment_count")
+  readingTime Int?       @map("reading_time")
+  publishDate String?    @map("publish_date") @db.VarChar(20) // 格式化的发布日期字符串
+  readTime   String?     @map("read_time") @db.VarChar(10)    // 格式化的阅读时间字符串
+  category   String?     @db.VarChar(100)                        // 简化的分类字段
+  publishedAt DateTime?  @map("published_at")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  // 关系
+  author       User?      @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  categories   PostCategory[]
+  tags         PostTag[]
+  comments     Comment[]
+  views        PostView[]
+
+  @@index([authorId])
+  @@index([status])
+  @@index([publishedAt])
+  @@index([featured])
+  @@map("posts")
+}
+
+// 分类表
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique @db.VarChar(100)
+  slug        String   @unique @db.VarChar(100)
+  description String?  @db.Text
+  color       String   @default("#000000") @db.VarChar(7)
+  icon        String?  @db.VarChar(50)
+  postCount   Int      @default(0) @map("post_count")
+  sortOrder   Int      @default(0) @map("sort_order")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // 关系
+  posts       PostCategory[]
+
+  @@index([slug])
+  @@index([sortOrder])
+  @@index([isActive])
+  @@map("categories")
+}
+
+// 标签表
+model Tag {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique @db.VarChar(50)
+  slug      String   @unique @db.VarChar(50)
+  description String? @db.Text
+  postCount Int      @default(0) @map("post_count")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // 关系
+  posts     PostTag[]
+
+  @@index([slug])
+  @@index([postCount])
+  @@map("tags")
+}
+
+// 文章分类关联表
+model PostCategory {
+  postId       Int   @map("post_id")
+  categoryId   Int   @map("category_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  // 关系
+  post         Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  category     Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([postId, categoryId])
+  @@index([postId])
+  @@index([categoryId])
+  @@map("post_categories")
+}
+
+// 文章标签关联表
+model PostTag {
+  postId     Int   @map("post_id")
+  tagId      Int   @map("tag_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // 关系
+  post       Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag        Tag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+  @@index([postId])
+  @@index([tagId])
+  @@map("post_tags")
+}
+
+// 评论表
+model Comment {
+  id          Int      @id @default(autoincrement())
+  postId      Int      @map("post_id")
+  parentId    Int?     @map("parent_id")
+  authorName  String   @map("author_name") @db.VarChar(100)
+  authorEmail String?  @map("author_email") @db.VarChar(100)
+  authorWebsite String? @map("author_website") @db.VarChar(255)
+  authorIp    String?  @map("author_ip") @db.VarChar(45)
+  userId      Int?     @map("user_id")
+  content     String   @db.Text
+  status      String   @default("pending") @db.VarChar(20)
+  likeCount   Int      @default(0) @map("like_count")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // 关系
+  post        Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent      Comment? @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies     Comment[] @relation("CommentReplies")
+  user        User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([postId])
+  @@index([parentId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([authorEmail])
+  @@map("comments")
+}
+
+// 文章浏览记录表
+model PostView {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  ipAddress String?  @map("ip_address") @db.VarChar(45)
+  userAgent String?  @map("user_agent") @db.Text
+  referrer  String?  @db.VarChar(500)
+  userId    Int?     @map("user_id")
+  viewedAt  DateTime @default(now()) @map("viewed_at")
+
+  // 关系
+  post      Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+  @@index([ipAddress])
+  @@index([viewedAt])
+  @@index([postId, viewedAt])
+  @@map("post_views")
+}
+
+// 媒体文件表
+model MediaFile {
+  id          Int      @id @default(autoincrement())
+  filename    String   @db.VarChar(255)
+  originalName String  @map("original_name") @db.VarChar(255)
+  mimeType    String   @map("mime_type") @db.VarChar(100)
+  fileSize    Int      @map("file_size")
+  filePath    String   @map("file_path") @db.VarChar(500)
+  fileUrl     String   @map("file_url") @db.VarChar(500)
+  altText     String?  @map("alt_text") @db.VarChar(255)
+  caption     String?  @db.Text
+  uploaderId  Int?     @map("uploader_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // 关系
+  uploader    User? @relation(fields: [uploaderId], references: [id], onDelete: SetNull)
+
+  @@index([uploaderId])
+  @@index([mimeType])
+  @@index([createdAt])
+  @@map("media_files")
+}
+
+// 系统配置表
+model Setting {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique @db.VarChar(100)
+  value       String?  @db.Text
+  type        String   @default("string") @db.VarChar(50)
+  description String?  @db.Text
+  isPublic    Boolean  @default(false) @map("is_public")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([key])
+  @@index([isPublic])
+  @@map("settings")
+}

@@ -1,0 +1,823 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-jetbrains-mono);
+  --font-mono: var(--font-jetbrains-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.5rem;
+  /* 浅色模式 - 霓虹蓝绿撞色主题 */
+  --background: oklch(0.98 0.01 240); /* 非常浅的蓝色背景 */
+  --foreground: oklch(0.12 0.15 240); /* 深蓝色文字 */
+  --card: oklch(0.96 0.02 240); /* 浅色蓝色卡片背景 */
+  --card-foreground: oklch(0.12 0.15 240); /* 深色蓝色卡片文字 */
+  --popover: oklch(0.96 0.02 240); /* 浅色蓝色弹出框背景 */
+  --popover-foreground: oklch(0.12 0.15 240); /* 深色蓝色弹出框文字 */
+  --primary: oklch(0.72 0.18 145); /* LCD 护眼绿主色 - 更柔和的绿色 */
+  --primary-foreground: oklch(0.02 0.01 240); /* 主色上的深色文字 */
+  --secondary: oklch(0.88 0.06 240); /* 浅蓝色次要色 */
+  --secondary-foreground: oklch(0.15 0.12 240); /* 次要色上的深色文字 */
+  --muted: oklch(0.92 0.03 240); /* 静音色 - 浅灰蓝 */
+  --muted-foreground: oklch(0.4 0.08 240); /* 静音文字 - 中等蓝色 */
+  --accent: oklch(0.65 0.4 220); /* 霓虹蓝色撞色 */
+  --accent-foreground: oklch(0.98 0.01 240); /* 撞色上的浅色文字 */
+  --destructive: oklch(0.6 0.4 0); /* 红色警告色 */
+  --warning: oklch(0.85 0.25 60); /* 黄色警告色 */
+  --border: oklch(0.75 0.06 240); /* 浅蓝色边框 */
+  --input: oklch(0.88 0.04 240); /* 输入框浅色背景 */
+  --ring: oklch(0.72 0.18 145); /* 焦点环颜色 - LCD 护眼绿 */
+  --chart-1: oklch(0.72 0.18 145); /* 图表主色 - LCD 护眼绿 */
+  --chart-2: oklch(0.65 0.4 220); /* 图表撞色 - 霓虹蓝 */
+  --chart-3: oklch(0.45 0.2 280); /* 图表第三色 - 紫色 */
+  --chart-4: oklch(0.35 0.25 200); /* 图表第四色 - 青色 */
+  --chart-5: oklch(0.25 0.3 160); /* 图表第五色 - 蓝绿色 */
+  --sidebar: oklch(0.94 0.02 240); /* 侧边栏浅色背景 */
+  --sidebar-foreground: oklch(0.12 0.15 240); /* 侧边栏深色文字 */
+  --sidebar-primary: oklch(0.72 0.18 145); /* 侧边栏主色 - LCD 护眼绿 */
+  --sidebar-primary-foreground: oklch(
+    0.02 0.01 240
+  ); /* 侧边栏主色上的深色文字 */
+  --sidebar-accent: oklch(0.88 0.06 240); /* 侧边栏强调色 */
+  --sidebar-accent-foreground: oklch(
+    0.15 0.12 240
+  ); /* 侧边栏强调色上的深色文字 */
+  --sidebar-border: oklch(0.75 0.06 240); /* 侧边栏边框 */
+  --sidebar-ring: oklch(0.72 0.18 145); /* 侧边栏焦点环 - LCD 护眼绿 */
+
+  /* 动画时间设计令牌 */
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 600ms;
+  --duration-slowest: 1000ms;
+
+  /* 动画缓动函数 */
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+
+  /* 阴影效果设计令牌 - 使用已定义的颜色变量 */
+  --shadow-accent: 0 0 var(--size-lg) oklch(var(--accent) / 0.2);
+  --shadow-primary: 0 0 var(--size-xl) oklch(var(--primary) / 0.3);
+  --shadow-command: 0 0 var(--size-lg) oklch(var(--primary) / 0.8),
+    0 0 var(--size-2xl) oklch(var(--primary) / 0.5),
+    0 0 var(--size-3xl) oklch(var(--primary) / 0.3);
+  --shadow-command-base: 0 0 1px oklch(var(--foreground) / 0.5);
+
+  /* 尺寸设计令牌 */
+  --size-xs: 1px;
+  --size-sm: 2px;
+  --size-md: 4px;
+  --size-lg: 6px;
+  --size-xl: 8px;
+  --size-2xl: 10px;
+  --size-3xl: 12px;
+  --size-4xl: 16px;
+  --size-5xl: 20px;
+  --size-6xl: 24px;
+  --size-8xl: 32px;
+  --size-10xl: 40px;
+  --size-12xl: 48px;
+
+  /* 间距设计令牌 */
+  --space-2xs: 1px;
+  --space-xs: 2px;
+  --space-sm: 4px;
+  --space-md: 6px;
+  --space-lg: 8px;
+  --space-xl: 10px;
+  --space-2xl: 12px;
+  --space-3xl: 16px;
+  --space-4xl: 20px;
+  --space-6xl: 24px;
+  --space-8xl: 32px;
+}
+
+.dark {
+  /* 深色模式 - 霓虹蓝绿撞色，深蓝背景 */
+  --background: oklch(0.01 0.02 240); /* 深蓝色背景 */
+  --foreground: oklch(0.98 0.2 240); /* 亮蓝色文字 */
+  --card: oklch(0.08 0.03 240); /* 深蓝色卡片 */
+  --card-foreground: oklch(0.98 0.2 240); /* 亮蓝色卡片文字 */
+  --popover: oklch(0.08 0.03 240); /* 深蓝色弹出框 */
+  --popover-foreground: oklch(0.98 0.2 240); /* 亮蓝色弹出框文字 */
+  --primary: oklch(0.78 0.15 145); /* 深色模式 LCD 护眼绿 */
+  --primary-foreground: oklch(0.01 0.02 240); /* 主色上的深蓝文字 */
+  --secondary: oklch(0.18 0.04 240); /* 深蓝色次要色 */
+  --secondary-foreground: oklch(0.78 0.15 145); /* 次要色上的 LCD 绿文字 */
+  --muted: oklch(0.12 0.02 240); /* 暗蓝色静音色 */
+  --muted-foreground: oklch(0.5 0.08 240); /* 静音文字 - 中等蓝色 */
+  --accent: oklch(0.75 0.4 220); /* 霓虹蓝色撞色 */
+  --accent-foreground: oklch(0.98 0.2 240); /* 撞色上的亮蓝文字 */
+  --destructive: oklch(0.8 0.4 0); /* 红色警告色 */
+  --warning: oklch(0.25 0.25 60); /* 黄色警告色 */
+  --border: oklch(0.25 0.08 240); /* 深蓝色边框 */
+  --input: oklch(0.18 0.04 240); /* 深蓝色输入框 */
+  --ring: oklch(0.78 0.15 145); /* 焦点环 - LCD 护眼绿 */
+  --chart-1: oklch(0.78 0.15 145); /* 图表主色 - 深色模式 LCD 绿 */
+  --chart-2: oklch(0.75 0.4 220); /* 图表撞色 - 霓虹蓝 */
+  --chart-3: oklch(0.55 0.2 280); /* 图表第三色 - 紫色 */
+  --chart-4: oklch(0.45 0.25 200); /* 图表第四色 - 青色 */
+  --chart-5: oklch(0.35 0.3 160); /* 图表第五色 - 蓝绿色 */
+  --sidebar: oklch(0.06 0.03 240); /* 侧边栏深蓝背景 */
+  --sidebar-foreground: oklch(0.98 0.2 240); /* 侧边栏亮蓝文字 */
+  --sidebar-primary: oklch(0.78 0.15 145); /* 侧边栏主色 - 深色模式 LCD 绿 */
+  --sidebar-primary-foreground: oklch(
+    0.01 0.02 240
+  ); /* 侧边栏主色上的深蓝文字 */
+  --sidebar-accent: oklch(0.18 0.04 240); /* 侧边栏深蓝强调色 */
+  --sidebar-accent-foreground: oklch(
+    0.78 0.15 145
+  ); /* 侧边栏强调色上的 LCD 绿文字 */
+  --sidebar-border: oklch(0.25 0.08 240); /* 侧边栏深蓝边框 */
+  --sidebar-ring: oklch(0.78 0.15 145); /* 侧边栏焦点环 - LCD 护眼绿 */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* 统一字体系统 - JetBrains Mono */
+  body {
+    font-family: var(--font-jetbrains-mono), system-ui, -apple-system, "SF Mono",
+      "Fira Code", "Consolas", "Liberation Mono", "Menlo", monospace;
+    letter-spacing: 0.02em; /* 增强字符间距，提升电子屏感 */
+    font-variant-numeric: tabular-nums; /* 数字等宽对齐 */
+    font-optical-sizing: auto; /* 优化不同字号的显示效果 */
+    @apply bg-background text-foreground;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* 电子屏字体效果 */
+@layer utilities {
+  /* 电子屏文字效果 - 扫描线和辉光 */
+  .electron-text {
+    position: relative;
+    text-shadow: 0 0 2px oklch(var(--accent) / 0.5),
+      /* 霓虹蓝辉光 */ 0 0 4px oklch(var(--accent) / 0.3),
+      0 0 var(--size-2xl) oklch(var(--accent) / 0.2),
+      0 0 1px oklch(var(--primary) / 0.4); /* LCD 护眼绿微光 */
+  }
+
+  /* 扫描线效果 */
+  .electron-text::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      oklch(0.65 0.4 220 / 0.1) 1px,
+      oklch(0.65 0.4 220 / 0.1) 2px
+    );
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .electron-text:hover::before {
+    opacity: 1;
+  }
+
+  /* 像素化文字效果 */
+  .pixel-text {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    font-smooth: never;
+    -webkit-font-smoothing: none;
+  }
+
+  /* 故障失真效果 */
+  .glitch-text {
+    position: relative;
+    display: inline-block;
+  }
+
+  .glitch-text::before,
+  .glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .glitch-text::before {
+    animation: glitch-1 var(--duration-slow) infinite;
+    color: oklch(var(--primary) / 0.9);
+    z-index: -1;
+    clip-path: inset(0 0 100% 0);
+  }
+
+  .glitch-text::after {
+    animation: glitch-2 var(--duration-slow) infinite;
+    color: oklch(0.75 0.15 280);
+    z-index: -2;
+    clip-path: inset(0 0 0 100%);
+  }
+
+  @keyframes glitch-1 {
+    0%,
+    100% {
+      clip-path: inset(0 0 100% 0);
+      transform: translate(0);
+    }
+    20% {
+      clip-path: inset(20% 0 30% 0);
+      transform: translate(-2px, 2px);
+    }
+    40% {
+      clip-path: inset(50% 0 20% 0);
+      transform: translate(2px, -2px);
+    }
+    60% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, 1px);
+    }
+    80% {
+      clip-path: inset(80% 0 5% 0);
+      transform: translate(1px, -1px);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0%,
+    100% {
+      clip-path: inset(0 0 0 100%);
+      transform: translate(0);
+    }
+    20% {
+      clip-path: inset(60% 0 10% 0);
+      transform: translate(2px, 1px);
+    }
+    40% {
+      clip-path: inset(20% 0 40% 0);
+      transform: translate(-2px, -1px);
+    }
+    60% {
+      clip-path: inset(70% 0 15% 0);
+      transform: translate(1px, 2px);
+    }
+    80% {
+      clip-path: inset(30% 0 50% 0);
+      transform: translate(-1px, -2px);
+    }
+  }
+
+  .cyber-border {
+    position: relative;
+    border: var(--size-sm) solid transparent;
+    /* 像素点状边框 - LCD 护眼绿主色 */
+    border-image: repeating-linear-gradient(
+        45deg,
+        oklch(var(--primary)) var(--size-xs),
+        oklch(var(--primary)) var(--size-sm),
+        transparent 2px,
+        transparent 4px
+      )
+      2;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  /* 像素边框变体 - 霓虹蓝色撞色 */
+  .cyber-border-dense {
+    position: relative;
+    border-style: dotted;
+    border-color: oklch(var(--accent) / 0.6); /* 霓虹蓝色 */
+    border-width: var(--size-xs);
+    image-rendering: pixelated;
+  }
+
+  /* 像素边框变体 - 交叉线撞色样式 */
+  .cyber-border-cross {
+    position: relative;
+    background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        oklch(0.65 0.4 220 / 0.3) 3px,
+        oklch(0.65 0.4 220 / 0.3) 4px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 3px,
+        oklch(0.72 0.18 145 / 0.2) 3px,
+        oklch(0.72 0.18 145 / 0.2) 4px
+      );
+    background-size: var(--size-md) var(--size-md);
+    background-position: 0 0, 0 0;
+    pointer-events: none;
+    image-rendering: pixelated;
+  }
+
+  /* 像素边框变体 - 霓虹扫描线风格 */
+  .cyber-border-scanline {
+    position: relative;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      oklch(0.65 0.4 220 / 0.15) 1px,
+      oklch(0.65 0.4 220 / 0.15) 2px
+    );
+    image-rendering: pixelated;
+  }
+
+  /* 混合撞色边框 - LCD 护眼绿和霓虹蓝交替 */
+  .cyber-border-mixed {
+    position: relative;
+    border: var(--size-sm) solid transparent;
+    border-image: repeating-linear-gradient(
+        90deg,
+        oklch(var(--primary)) var(--size-xs),
+        oklch(0.72 0.18 145) 4px,
+        oklch(0.65 0.4 220) 4px,
+        oklch(0.65 0.4 220) 8px,
+        transparent 8px,
+        transparent 12px
+      )
+      3;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  .noise-overlay {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .noise-overlay::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      oklch(var(--primary) / 0.03) var(--size-xs),
+      transparent 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .data-stream {
+    animation: data-flicker var(--duration-fast) infinite;
+  }
+
+  @keyframes data-flicker {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+
+  .terminal-cursor {
+    animation: blink var(--duration-slowest) infinite;
+  }
+
+  @keyframes blink {
+    0%,
+    50% {
+      opacity: 1;
+    }
+    51%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 var(--size-5xl) oklch(var(--primary) / 0.4),
+      0 0 var(--size-10xl) oklch(var(--primary) / 0.2);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+  }
+
+  .cyber-grid {
+    background-image: linear-gradient(
+        rgba(0, 174, 255, 0.02) 1px,
+        transparent 1px
+      ),
+      /* 霓虹蓝色线 */
+        linear-gradient(90deg, rgba(0, 174, 255, 0.02) 1px, transparent 1px);
+    background-size: var(--space-5xl) var(--space-5xl);
+    background-position: 0 0, 0 0;
+  }
+
+  .matrix-text {
+    font-family: "Courier New", monospace;
+    letter-spacing: 0.1em;
+    text-shadow: var(--shadow-primary),
+      0 0 var(--size-4xl) oklch(var(--primary) / 0.3);
+  }
+
+  .loading-dots::after {
+    content: "...";
+    animation: dots var(--duration-slower) steps(4, end) infinite;
+  }
+
+  @keyframes dots {
+    0%,
+    20% {
+      content: "";
+    }
+    40% {
+      content: ".";
+    }
+    60% {
+      content: "..";
+    }
+    80%,
+    100% {
+      content: "...";
+    }
+  }
+
+  .cyber-button {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.15s ease;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  .cyber-button:hover {
+    animation: pixel-glitch var(--duration-normal) var(--ease-in-out);
+  }
+
+  @keyframes pixel-glitch {
+    0% {
+      transform: translate(0, 0);
+      filter: none;
+    }
+    10% {
+      transform: translate(-1px, 0);
+      filter: hue-rotate(20deg);
+    }
+    20% {
+      transform: translate(1px, 0);
+      filter: hue-rotate(-20deg);
+    }
+    30% {
+      transform: translate(-1px, 1px);
+      filter: brightness(1.2);
+    }
+    40% {
+      transform: translate(1px, -1px);
+      filter: brightness(0.8);
+    }
+    50% {
+      transform: translate(-1px, 0);
+      filter: hue-rotate(10deg) saturate(1.5);
+    }
+    60% {
+      transform: translate(0, 1px);
+      filter: hue-rotate(-10deg) saturate(0.5);
+    }
+    70% {
+      transform: translate(0, -1px);
+      filter: contrast(1.2);
+    }
+    80% {
+      transform: translate(0, 0);
+      filter: contrast(0.8);
+    }
+    90% {
+      transform: translate(0.5px, 0.5px);
+      filter: sepia(0.2);
+    }
+    100% {
+      transform: translate(0, 0);
+      filter: none;
+    }
+  }
+
+  /* 像素化边缘效果 */
+  .cyber-button::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      oklch(0.72 0.18 145 / 0.05) 2px,
+      oklch(0.72 0.18 145 / 0.05) 4px
+    );
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  .cyber-button:hover::after {
+    opacity: 1;
+  }
+
+  .waterfall-container {
+    column-count: 3;
+    column-gap: 1.5rem;
+    column-fill: balance;
+  }
+
+  @media (max-width: 1024px) {
+    .waterfall-container {
+      column-count: 2;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .waterfall-container {
+      column-count: 1;
+    }
+  }
+
+  /* 表单组件样式 */
+  .cyber-input:focus {
+    box-shadow: 0 0 0 1px var(--primary);
+  }
+
+  .cyber-checkbox[data-state="checked"] {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='m3.5 7.5 3 3L12.5 4' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: var(--space-3xl) var(--space-3xl);
+  }
+
+  .cyber-switch[data-state="checked"]::after {
+    background-color: var(--primary-foreground);
+    transform: translateX(20px);
+  }
+
+  .cyber-switch::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    background-color: var(--muted-foreground);
+    border-radius: 50%;
+    transition: transform var(--duration-slow) var(--ease-in-out),
+      background-color var(--duration-slow) var(--ease-in-out);
+  }
+
+  .cyber-select-content {
+    font-family: var(--font-jetbrains-mono), system-ui, -apple-system, "SF Mono",
+      "Fira Code", "Consolas", "Liberation Mono", "Menlo", monospace;
+    border: var(--size-sm) solid var(--primary);
+    box-shadow: 0 4px 6px -1px oklch(0.72 0.18 145 / 0.1);
+  }
+
+  /* 终端风格 Hero 组件样式 */
+  .terminal-window {
+    background: var(--card); /* 使用主题卡片色 */
+    border: var(--size-xs) solid var(--border); /* 使用主题边框色 */
+    border-radius: var(--radius); /* 使用主题圆角 */
+    padding: var(--space-4xl);
+    box-shadow: 0 var(--space-3xl) var(--space-8xl) oklch(var(--primary) / 0.1); /* LCD 护眼绿阴影 */
+    font-family: var(--font-jetbrains-mono), monospace;
+  }
+
+  .terminal-header {
+    user-select: none;
+  }
+
+  /* 终端颜色变量 - 关联主题系统 */
+  .terminal-green {
+    color: var(--primary); /* 使用主题主色 - LCD 护眼绿 */
+    text-shadow: var(--shadow-primary);
+  }
+
+  .terminal-cyan {
+    color: var(--accent); /* 使用主题撞色 - 霓虹蓝 */
+    text-shadow: var(--shadow-accent);
+  }
+
+  .terminal-yellow {
+    color: var(--warning); /* 警告黄色 */
+    text-shadow: 0 0 var(--size-lg) oklch(var(--warning) / 0.2);
+  }
+
+  .terminal-muted {
+    color: var(--muted-foreground); /* 使用主题静音色 */
+  }
+
+  .terminal-border {
+    color: var(--border); /* 使用主题边框色 */
+    border-color: var(--border);
+  }
+
+  /* 光标闪烁效果 */
+  .terminal-cursor {
+    animation: cursor-blink var(--duration-slowest) infinite;
+    color: var(--accent); /* 使用主题撞色作为光标颜色 */
+  }
+
+  @keyframes cursor-blink {
+    0%,
+    50% {
+      opacity: 1;
+    }
+    51%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* 终端命令样式 */
+  .terminal-command {
+    transition: all var(--duration-normal) var(--ease-in-out);
+    text-shadow: var(--shadow-command-base);
+  }
+
+  .terminal-command:hover {
+    text-shadow: var(--shadow-command);
+    color: oklch(var(--primary));
+  }
+
+  /* 进度条样式 */
+  .terminal-progress {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+    box-shadow: 0 0 var(--size-4xl) oklch(var(--primary) / 0.5);
+  }
+
+  /* 文本截断工具类 */
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Navbar 专用故障效果 */
+  .navbar-glitch {
+    position: relative;
+    transition: all var(--duration-normal) var(--ease-in-out);
+  }
+
+  .navbar-glitch:hover {
+    animation: navbar-glitch-effect var(--duration-normal) var(--ease-in-out);
+    text-shadow: 0 0 2px oklch(var(--accent) / 0.8),
+      0 0 4px oklch(var(--accent) / 0.6),
+      0 0 var(--size-xl) oklch(var(--primary) / 0.4);
+    transform: translateY(-1px);
+  }
+
+  @keyframes navbar-glitch-effect {
+    0% {
+      transform: translate(0, 0);
+      filter: none;
+    }
+    10% {
+      transform: translate(-1px, 0);
+      filter: hue-rotate(15deg) brightness(1.1);
+    }
+    20% {
+      transform: translate(1px, 0);
+      filter: hue-rotate(-15deg) brightness(0.9);
+    }
+    30% {
+      transform: translate(-1px, 1px);
+      filter: hue-rotate(10deg) saturate(1.2);
+    }
+    40% {
+      transform: translate(1px, -1px);
+      filter: hue-rotate(-10deg) saturate(0.8);
+    }
+    50% {
+      transform: translate(0, 1px);
+      filter: brightness(1.15) contrast(1.1);
+    }
+    60% {
+      transform: translate(0, -1px);
+      filter: brightness(0.85) contrast(0.9);
+    }
+    70% {
+      transform: translate(0.5px, 0.5px);
+      filter: sepia(0.1) hue-rotate(5deg);
+    }
+    80% {
+      transform: translate(-0.5px, -0.5px);
+      filter: hue-rotate(-5deg) saturate(1.1);
+    }
+    90% {
+      transform: translate(0.5px, -0.5px);
+      filter: contrast(1.05) brightness(1.05);
+    }
+    100% {
+      transform: translate(0, 0);
+      filter: none;
+    }
+  }
+
+  /* Navbar 故障效果的副层 */
+  .navbar-glitch::before,
+  .navbar-glitch::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--duration-fast) ease;
+  }
+
+  .navbar-glitch:hover::before {
+    opacity: 0.3;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      oklch(var(--primary) / 0.1) 45%,
+      oklch(var(--primary) / 0.1) 55%,
+      transparent 100%
+    );
+    animation: navbar-scanline var(--duration-slow) linear;
+  }
+
+  .navbar-glitch:hover::after {
+    opacity: 0.2;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      oklch(var(--accent) / 0.1) 1px,
+      oklch(var(--accent) / 0.1) 2px
+    );
+  }
+
+  @keyframes navbar-scanline {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+}
