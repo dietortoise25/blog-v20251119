@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - run: npm install
-      - run: npm run build
+      - name: 读取仓库内容
+        uses: actions/checkout@v4
+      - name: 安装依赖
+        run: pnpm install
+      - name: 构建项目
+        run: pnpm run build
